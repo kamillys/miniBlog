@@ -42,8 +42,9 @@ add esi,0x79 ; przesuń się z kodem BF na początek kodu asm zapisanego w pliku
 nop ; filler
 nop
 nop
-jmp 0x1a ; +0x1a aby ominąć dane
+jmp buffer2 ; aby ominąć dane
 ;[DANE] czyli ptr, size, 2 bajty kodu ważnego JITa i teraz drugi bufor
+buffer2:
 add edi,0x36 ; przesuń docelowy wskaźnik JIT na koniec "tego co będzie po nopach"
 mov cx,0xff ; skopiuj 255 bajtów [można więcej tylko trzeba mieć na uwadze że jest 4kB miejsca minus kod użyty na JIT
 rep movs ; memcpy
