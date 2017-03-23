@@ -4,7 +4,7 @@ Niniejszy artykuł dotyczy exploitacji programu jitbf który można znaleźć tu
 https://github.com/gynvael/stream/tree/03774e1f293f318c466a28b03735315c1a6c04b7/019-jitbf
 Program powstał w trakcie streamu: https://www.youtube.com/watch?v=wJxWBeHWnGQ
 
-## Jak doszedłem do ekspoita jako początkujący hakier
+## Jak doszedłem do eksploita jako początkujący hakier
 Na początku zauważyłem, że obszar JIT jest "rwx", czyli można tam zapisać kod a następnie wykonać. Założyłem, że jest to najlepsze pole do expoitacji. Pomijam takie rzeczy jak crash w przypadku błędnego kodu BF jak "[" bo to nie jest "wystarczająco fajne". Dosyć łatwo można zauważyć, że można w automacie BF wyjechać poza taśmę i nadpisać sobie wskaźnik ale tylko 1 bajtem. Niestety ale tutaj pomysł jest zły - kod który by przesunął się na początek JITa zajmuje za dużo miejsca: ciąg <<< lub >>> jest jitowany oraz zapisywany 2 bajty per znak oraz limitem 4kB.
 
 Potem odkryłem, że przecież można nadpisać kod który jest kopiowany do JITa: globalne zmienne jit_ptr_inc oraz jit_ptr_dec z których jest kopiowany kod JIT nie są chronione. Oprócz tego te zmienne są bardzo blisko ctx (kilkadziesiąt bajtów oraz "po bliższej stronie"). Zmienne globalne są umieszczone całym blokiem pamięci zatem ich położenie względne jest niezależnie od adresu wirtualnego.
