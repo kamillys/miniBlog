@@ -56,3 +56,6 @@ nop
 ```
 
 To skopiowało kod z pliku wejściowego do kodu JIT zatem w tym miejscu mam "arbitrary code execution". No to dlaczego by nie uruchomić calc.exe? To z pomocą googla znalazłem shellcode który uruchamia calc.exe (oczywiście sprawdzić trzeba co to robi, nie wolno wykonywać dziwnego kodu na swojej maszynie).
+
+## Pare info o std::string
+Użyłem pojęcia "starej implementacji std::string". Rzecz się dotyczy tego, że pewnego dnia zmieniono implementację std::string tak, aby używał refcount'a zamiast wewnętrznego bufora. Ta zmiana wpłynęła na to, że zoptymalizowano "kopiowanie" dużych stringów dzięki wzorcowi copy-on-write lub też leniwej kopii co uznano za bardziej korzystne niż trzymanie małego bufora wewnątrz struktury dla krótkich napisów. Oczywistym jest, że na tej nowej implementacji nie można eksploitować wewnętrznego bufora skoro go nie ma. No i generalnie bug w jitbf polega na możliwości zapisu "poza taśmą" a nie w samym std::string, tak więc sam w sobie std::string jest, był i będzie bezpieczną konstrukcją (przynajmniej z założenia). Z drugiej strony nie ma określonego zachowania poza taśmą w specyfikacji, tak więc można uznać że jitbf zachowuje się zgodnie z założeniem... odpalając calc.exe albo formatując dysk.
